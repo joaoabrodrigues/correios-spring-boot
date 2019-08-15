@@ -8,19 +8,13 @@
     stages {
 		stage('Configure') {
 			steps {
-				step {
-					version = '1.0.' + env.BUILD_NUMBER
-				}
-				step {
+				version = '1.0.' + env.BUILD_NUMBER
+			}
+			post {
+				always {
 					currentBuild.displayName = version
 				}
 			}
-
-			// properties([
-			// 		buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '10')),
-			// 		[$class: 'GithubProjectProperty', displayName: '', projectUrlStr: 'https://github.com/joaoabrodrigues/correios-spring-boot/'],
-			// 		pipelineTriggers([[$class: 'GitHubPushTrigger']])
-			// ])
 		}
 		stage('Checkout') {
 			steps {
