@@ -1,6 +1,11 @@
 node {
+
+    tools {
+        maven 'Maven 3.3.9'
+        jdk 'jdk8'
+    }
+
     stage('Configure') {
-        env.PATH = "${tool 'maven-3.3.9'}/bin:${env.PATH}"
         version = '1.0.' + env.BUILD_NUMBER
         currentBuild.displayName = version
 
