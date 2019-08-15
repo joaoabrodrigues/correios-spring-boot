@@ -8,12 +8,10 @@
     stages {
 		stage('Configure') {
 			steps {
-				version = '1.0.' + env.BUILD_NUMBER
-			}
-			post {
-				always {
+				script {
+                    version = '1.0.' + env.BUILD_NUMBER
 					currentBuild.displayName = version
-				}
+                }
 			}
 		}
 		stage('Checkout') {
