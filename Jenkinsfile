@@ -8,11 +8,12 @@
     stages {
 		stage('Configure') {
 			steps {
-				version = '1.0.' + env.BUILD_NUMBER
-			}
-
-			steps {
-				currentBuild.displayName = version
+				step {
+					version = '1.0.' + env.BUILD_NUMBER
+				}
+				step {
+					currentBuild.displayName = version
+				}
 			}
 
 			// properties([
