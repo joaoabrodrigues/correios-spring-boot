@@ -1,4 +1,4 @@
-node {
+ pipeline {
 
     agent {
         docker {
@@ -7,38 +7,42 @@ node {
         }
     }
 
-    stage('Configure') {
-        version = '1.0.' + env.BUILD_NUMBER
-        currentBuild.displayName = version
+    stages {
 
-        properties([
-                buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '10')),
-                [$class: 'GithubProjectProperty', displayName: '', projectUrlStr: 'https://github.com/joaoabrodrigues/correios-spring-boot/'],
-                pipelineTriggers([[$class: 'GitHubPushTrigger']])
-            ])
-    }
+	stage('Configure') {
+		version = '1.0.' + env.BUILD_NUMBER
+		currentBuild.displayName = version
 
-    stage('Checkout') {
-        git 'https://github.com/joaoabrodrigues/correios-spring-boot'
-    }
+        	properties([
+                	buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '10')),
+	                [$class: 'GithubProjectProperty', displayName: '', projectUrlStr: 'https://github.com/joaoabrodrigues/correios-spring-boot/'],
+	                pipelineTriggers([[$class: 'GitHubPushTrigger']])
+        	])
+    	}
 
-    stage('Version') {
-        sh "mvn versions:set -DnewVersion=$version"
-    }
+        stage('Checkout') {
+	        git 'https://github.com/joaoabrodrigues/correios-spring-boot'
+        }
 
-    stage('Build') {
-        sh 'mvn clean package'
-    }
+    	stage('Version') {
+		sh "mvn versions:set -DnewVersion=$version"
+    	}
 
-    stage('Test') {
-	sh 'mvn verify'
-    }
+    	stage('Build') {
+		sh 'mvn clean package'
+    	}
 
-    stage('Archive') {
-        junit allowEmptyResults: true, testResults: '**/target/**/TEST*.xml'
-    }
+    	stage('Test') {
+		sh 'mvn verify'
+	}
 
-    stage('Deploy') {
-	echo 'This is the deploy pipeline.'
+	stage('Archive') {
+		junit allowEmptyResults: true, testResults: '**/target/**/TEST*.xml'
+	}
+
+    	stage('Deploy') {
+		echo 'This is the deploy pipeline.'
+    	}
+
     }
 }
