@@ -1,8 +1,10 @@
 node {
 
-    tools {
-        maven 'Maven 3.3.9'
-        jdk 'jdk8'
+    agent {
+        docker {
+            image 'maven:3-alpine'
+            args '-v /root/.m2:/root/.m2'
+        }
     }
 
     stage('Configure') {
@@ -21,15 +23,22 @@ node {
     }
 
     stage('Version') {
-        sh "echo \'\ninfo.build.version=\'$version >> src/main/resources/application.properties || true"
-        sh "mvn -B -V -U -e versions:set -DnewVersion=$version"
+        sh "mvn versions:set -DnewVersion=$version"
     }
 
     stage('Build') {
-        sh 'mvn -B -V -U -e clean package'
+        sh 'mvn clean package'
+    }
+
+    stage('Test') {
+	sh 'mvn verify'
     }
 
     stage('Archive') {
         junit allowEmptyResults: true, testResults: '**/target/**/TEST*.xml'
+    }
+
+    stage('Deploy') {
+	echo 'This is the deploy pipeline.'
     }
 }
