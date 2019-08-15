@@ -10,6 +10,7 @@
     stages {
 
 	stage('Configure') {
+	   steps {
 		version = '1.0.' + env.BUILD_NUMBER
 		currentBuild.displayName = version
 
@@ -18,30 +19,43 @@
 	                [$class: 'GithubProjectProperty', displayName: '', projectUrlStr: 'https://github.com/joaoabrodrigues/correios-spring-boot/'],
 	                pipelineTriggers([[$class: 'GitHubPushTrigger']])
         	])
+	   }
     	}
 
         stage('Checkout') {
+	   steps {
 	        git 'https://github.com/joaoabrodrigues/correios-spring-boot'
+	   }
         }
 
     	stage('Version') {
+	   steps {
 		sh "mvn versions:set -DnewVersion=$version"
+	   }
     	}
 
     	stage('Build') {
+	   steps {
 		sh 'mvn clean package'
+	   }
     	}
 
     	stage('Test') {
+	   steps {
 		sh 'mvn verify'
+	   }
 	}
 
 	stage('Archive') {
+	   steps {
 		junit allowEmptyResults: true, testResults: '**/target/**/TEST*.xml'
+	   }
 	}
 
     	stage('Deploy') {
+	   steps {
 		echo 'This is the deploy pipeline.'
+	   }
     	}
 
     }
