@@ -1,4 +1,4 @@
-package com.joaoabrodrigues.correios.application;
+package com.joaoabrodrigues.correios;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
