@@ -1,6 +1,6 @@
 package com.joaoabrodrigues.correios.service;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class TrackService {
+public class TrackingService {
 	
-	@Value("${correios.url.tracking}")
-	private String urlTracking;
+	@Value("${correios.url.service}")
+	private String url;
 	
 	public String getTrackInformation(String object) {
 		
@@ -28,15 +28,16 @@ public class TrackService {
 				+ "</objetos>"
 				+ "<lingua>101</lingua>"
 				+ "</rastroObjeto>";
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_XML);
 
-		HttpEntity<String> entity = new HttpEntity<String>(request, headers);
+		HttpEntity<String> entity = new HttpEntity<>(request, headers);
 		
 		RestTemplate restTemplate = new RestTemplate();
-		restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
+		restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
 		
-		return restTemplate.postForObject(urlTracking, entity, String.class);
+		return restTemplate.postForObject(url, entity, String.class);
 	}
 
 }
