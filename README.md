@@ -1,3 +1,3 @@
 # correios-spring-boot
 
-Spring boot API to use with Angular
+Spring boot API to use with <s>Angular</s> React
